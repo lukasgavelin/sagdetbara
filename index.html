@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Säg det bara!">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>Säg det bara! – Sällskapsspelet på svenska</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+
+  <div id="app">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-logo">
+        <span>⚡</span> SÄG DET BARA!
+      </div>
+      <div class="header-actions">
+        <button id="header-sound-toggle" class="icon-btn" title="Slå av/på ljud" aria-label="Ljudinställning">
+          🔊
+        </button>
+      </div>
+    </header>
+
+    <!-- ====================================================================
+         VY 1: Inställningar / Start
+         ==================================================================== -->
+    <main id="view-settings" class="view active">
+      <div style="padding-top: 12px; margin-bottom: 12px;">
+        <h1>Säg det bara!</h1>
+        <p class="subtitle">Blixtsnabbt ordförklaringsspel för sällskapet. Förklara så många ord du kan!</p>
+      </div>
+
+      <!-- Laglista -->
+      <section class="section-box">
+        <div class="section-title">
+          <span>Lag (minst 2 lag)</span>
+        </div>
+        <div id="team-list">
+          <!-- Dynamiskt fylld av app.js -->
+        </div>
+        <button id="btn-add-team" type="button" class="btn-add-team">
+          <span>➕</span> Lägg till ett lag till
+        </button>
+      </section>
+
+      <!-- Välj Ordpaket -->
+      <section class="section-box">
+        <div class="section-title">
+          <span>Ordpaket & Teman</span>
+        </div>
+        <div class="package-grid">
+          <div class="package-card active" data-package="standard">
+            <div class="package-info">
+              <span class="package-name">🌟 Standard</span>
+              <span class="package-desc">Blandat & vardag</span>
+            </div>
+            <span class="package-check">✓</span>
+          </div>
+
+          <div class="package-card active" data-package="party">
+            <div class="package-info">
+              <span class="package-name">🎉 Party & Fest</span>
+              <span class="package-desc">Slang, drinkar & nattliv</span>
+            </div>
+            <span class="package-check">✓</span>
+          </div>
+
+          <div class="package-card" data-package="familj">
+            <div class="package-info">
+              <span class="package-name">👨‍👩‍👧 Familj</span>
+              <span class="package-desc">Lättsamt för alla åldrar</span>
+            </div>
+            <span class="package-check">✓</span>
+          </div>
+
+          <div class="package-card" data-package="klurigt">
+            <div class="package-info">
+              <span class="package-name">🧠 Nörd & Klurigt</span>
+              <span class="package-desc">Vetenskap & begrepp</span>
+            </div>
+            <span class="package-check">✓</span>
+          </div>
+        </div>
+
+        <button id="btn-open-custom-words" type="button" class="btn-secondary" style="margin-top: 12px; font-size: 0.95rem;">
+          ✍️ Egna ord & interna skämt (<span id="custom-words-count">0</span> st)
+        </button>
+      </section>
+
+      <!-- Målställning -->
+      <section class="section-box">
+        <div class="section-title">
+          <span>Målställning (Poäng för vinst)</span>
+        </div>
+        <div class="chip-grid">
+          <button type="button" class="chip-btn" data-target-score="30">30 p</button>
+          <button type="button" class="chip-btn active" data-target-score="50">50 p</button>
+          <button type="button" class="chip-btn" data-target-score="80">80 p</button>
+        </div>
+      </section>
+
+      <!-- Rundtid -->
+      <section class="section-box">
+        <div class="section-title">
+          <span>Rundtid per lag</span>
+        </div>
+        <div class="chip-grid">
+          <button type="button" class="chip-btn" data-round-time="30">30s</button>
+          <button type="button" class="chip-btn" data-round-time="45">45s</button>
+          <button type="button" class="chip-btn active" data-round-time="60">60s</button>
+          <button type="button" class="chip-btn" data-round-time="90">90s</button>
+        </div>
+      </section>
+
+      <!-- Regler & Alternativ -->
+      <section class="section-box">
+        <div class="section-title">
+          <span>Regler & Funktioner</span>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="main">Minuspoäng vid pass</span>
+            <span class="desc">-1 poäng vid pass</span>
+          </div>
+          <div id="toggle-penalty" class="toggle-switch active">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <div class="toggle-row" style="margin-top: 8px;">
+          <div class="toggle-label">
+            <span class="main">Ljudeffekter & Varningar</span>
+            <span class="desc">Pip sista 5s och slutsignal</span>
+          </div>
+          <div id="toggle-sound" class="toggle-switch active">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+      </section>
+
+      <div style="margin-top: auto; padding-top: 10px; padding-bottom: 20px;">
+        <button id="btn-start-game" type="button" class="btn-primary">
+          Starta Matchen 🔥
+        </button>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         VY 2: Pass-and-play Ready View (Överlämning till förklarare)
+         ==================================================================== -->
+    <main id="view-ready" class="view">
+      <div class="ready-container">
+        <div id="ready-team-badge" class="team-badge-large">
+          <span class="team-dot"></span>
+          <span>Lag Blå</span>
+        </div>
+
+        <h2 class="ready-title"><span id="ready-team-name">Lag Blå</span>s tur!</h2>
+        <p class="ready-instruction">
+          Lämna över telefonen till förklararen. Tryck på knappen nedan när ni är redo att köra igång timern!
+        </p>
+
+        <div class="ready-stats-card">
+          <div class="ready-stat-item">
+            <span id="ready-round-num" class="ready-stat-value">Omgång 1</span>
+            <span class="ready-stat-label">Omgång</span>
+          </div>
+          <div class="ready-stat-item">
+            <span id="ready-team-score" class="ready-stat-value">0</span>
+            <span class="ready-stat-label">Nuvarande poäng</span>
+          </div>
+        </div>
+
+        <button id="btn-begin-round" type="button" class="btn-primary" style="max-width: 360px;">
+          Börja runda! ⏱️
+        </button>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         VY 3: Spelomgång (Game View)
+         ==================================================================== -->
+    <main id="view-game" class="view">
+      <!-- Toppinfo med lag och paus -->
+      <div class="game-header">
+        <div class="game-team-info">
+          <span id="game-team-dot" class="team-dot"></span>
+          <span id="game-team-name" class="game-team-name">Lag Blå</span>
+        </div>
+        <button id="btn-pause-game" class="icon-btn" title="Pausa / Stoppa runda" style="width: 38px; height: 38px; font-size: 1rem;">
+          ⏸️
+        </button>
+      </div>
+
+      <!-- Timer -->
+      <div class="timer-container">
+        <div id="timer-number" class="timer-number">60</div>
+        <div class="timer-bar-wrap">
+          <div id="timer-bar-fill" class="timer-bar-fill"></div>
+        </div>
+      </div>
+
+      <!-- Live score för aktuell runda -->
+      <div class="round-live-score">
+        <span id="live-correct-count" class="live-badge-correct">✓ 0</span>
+        <span id="live-pass-count" class="live-badge-pass">✕ 0</span>
+      </div>
+
+      <!-- Interaktivt Spelkort med swipe-stöd -->
+      <div class="card-arena">
+        <div id="word-card" class="word-card">
+          <div id="stamp-correct" class="stamp stamp-correct">RÄTT</div>
+          <div id="stamp-pass" class="stamp stamp-pass">PASS</div>
+
+          <span id="word-category" class="card-category-badge">Föremål</span>
+          <span id="word-text" class="word-text">Dammsugare</span>
+
+          <div class="card-gesture-hint">
+            <span>👈 Svep för Pass</span>
+            <span>•</span>
+            <span>Svep för Rätt 👉</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stora touch-knappar under kortet -->
+      <div class="game-controls">
+        <button id="btn-action-pass" type="button" class="btn-game btn-game-pass">
+          ✕ Pass (-1)
+        </button>
+        <button id="btn-action-correct" type="button" class="btn-game btn-game-correct">
+          ✓ Rätt (+1)
+        </button>
+      </div>
+
+      <!-- Paus-overlay (med möjlighet att stoppa/avbryta runda) -->
+      <div id="pause-overlay" class="pause-overlay">
+        <h2>Spelet är pausat</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 24px;">Vad vill ni göra?</p>
+        
+        <div class="pause-menu-actions">
+          <button id="btn-resume-game" type="button" class="btn-primary">
+            ▶️ Återuppta runda
+          </button>
+          <button id="btn-finish-early" type="button" class="btn-secondary">
+            🏁 Avsluta runda i förtid & räkna poäng
+          </button>
+          <button id="btn-discard-round" type="button" class="btn-secondary btn-danger">
+            🔄 Kasta rundan / Gör om
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         VY 4: Sammanfattning efter runda (Review)
+         ==================================================================== -->
+    <main id="view-review" class="view">
+      <div class="review-header">
+        <h2 id="review-team-name">Lag Blå - Granska runda</h2>
+        <p class="subtitle" style="margin-bottom: 12px;">Kontrollera och korrigera ord innan poängen spikas!</p>
+      </div>
+
+      <div class="review-score-banner">
+        <div class="review-stat">
+          <span id="review-correct-count" class="review-stat-val" style="color: var(--color-green-light);">0</span>
+          <span class="review-stat-lbl">Rätt</span>
+        </div>
+        <div class="review-stat">
+          <span id="review-pass-count" class="review-stat-val" style="color: var(--color-red-light);">0</span>
+          <span class="review-stat-lbl">Passade</span>
+        </div>
+        <div class="review-stat">
+          <span id="review-points-summary" class="review-stat-val" style="color: var(--color-accent-light);">+0 p</span>
+          <span class="review-stat-lbl">Rundpoäng</span>
+        </div>
+      </div>
+
+      <p class="review-hint">Tryck på valfritt ord för att ändra mellan Rätt och Pass:</p>
+
+      <div id="review-list" class="review-list">
+        <!-- Dynamiskt renderas av app.js -->
+      </div>
+
+      <div style="margin-top: auto; padding-bottom: 16px;">
+        <button id="btn-confirm-round" type="button" class="btn-primary">
+          Spara & Gå vidare ➡️
+        </button>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         VY 5: Poängställning (Scoreboard)
+         ==================================================================== -->
+    <main id="view-scoreboard" class="view">
+      <div style="padding-top: 12px; margin-bottom: 16px;">
+        <h1>Poängställning</h1>
+        <p id="scoreboard-target-hint" class="subtitle" style="margin-bottom: 16px;">Mål: 50 poäng</p>
+      </div>
+
+      <div id="scoreboard-list" class="scoreboard-list">
+        <!-- Dynamiskt fylld av app.js -->
+      </div>
+
+      <div style="margin-top: auto; padding-bottom: 16px;">
+        <button id="btn-next-round" type="button" class="btn-primary">
+          Nästa lag kör! 🚀
+        </button>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         VY 6: SUDDEN DEATH (Blixtrunda vid oavgjort)
+         ==================================================================== -->
+    <main id="view-sudden-death" class="view">
+      <div class="sudden-death-container">
+        <div class="sudden-death-icon">⚡🔥</div>
+        <h1 class="sudden-death-title">SUDDEN DEATH!</h1>
+        <p class="sudden-death-desc">
+          Oavgjort vid mållinjen! En dramatisk blixtrunda på <strong>25 sekunder</strong> avgör vilket lag som tar hem segern!
+        </p>
+
+        <div id="sudden-death-teams" class="sudden-death-teams-box">
+          <!-- Dynamiskt fylls i med de oavgjorda lagen -->
+        </div>
+
+        <button id="btn-start-sudden-death" type="button" class="btn-primary" style="max-width: 360px;">
+          Kör Blixtrunda! ⚡
+        </button>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         VY 7: Vinstskärm (Victory)
+         ==================================================================== -->
+    <main id="view-victory" class="view">
+      <div class="victory-container">
+        <div class="trophy-icon">🏆</div>
+        <h1 class="victory-title">GRATTIS!</h1>
+        <div id="victory-team-name" class="victory-team-name">Lag Blå vinner!</div>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div id="stat-winner-points" class="stat-box-num">52</div>
+            <div class="stat-box-lbl">Slutpoäng</div>
+          </div>
+          <div class="stat-box">
+            <div id="stat-accuracy" class="stat-box-num">84%</div>
+            <div class="stat-box-lbl">Träffsäkerhet</div>
+          </div>
+          <div class="stat-box">
+            <div id="stat-total-correct" class="stat-box-num">32</div>
+            <div class="stat-box-lbl">Antal Rätt</div>
+          </div>
+          <div class="stat-box">
+            <div id="stat-total-pass" class="stat-box-num">6</div>
+            <div class="stat-box-lbl">Antal Pass</div>
+          </div>
+        </div>
+
+        <button id="btn-play-again-same" type="button" class="btn-primary">
+          Spela igen med samma lag 🔄
+        </button>
+        <button id="btn-play-new-game" type="button" class="btn-secondary">
+          Ny match & inställningar ⚙️
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- ====================================================================
+       Modal: Egna Ord & Interna skämt
+       ==================================================================== -->
+  <div id="custom-words-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Egna Ord & Skämt</h2>
+        <button id="btn-close-custom-modal" class="btn-remove-team" style="font-size: 1.5rem;">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px;">
+          Lägg till interna skämt, kompisars namn eller roliga händelser. Dessa blandas automatiskt in i kortleken!
+        </p>
+
+        <div class="custom-words-input-wrap">
+          <input id="input-custom-word" type="text" class="custom-word-input" placeholder="T.ex. Markus svensexa..." maxlength="40">
+          <button id="btn-add-custom-word" type="button" class="btn-primary" style="width: auto; padding: 12px 18px; font-size: 1rem;">
+            Lägg till
+          </button>
+        </div>
+
+        <div class="section-title" style="margin-top: 16px;">
+          <span>Dina egna ord:</span>
+          <button id="btn-clear-all-custom" type="button" style="background: none; border: none; color: var(--color-red-light); font-size: 0.8rem; cursor: pointer;">Rensa alla</button>
+        </div>
+
+        <div id="custom-words-list" class="custom-words-list">
+          <!-- Renderas dynamiskt -->
+        </div>
+
+        <button id="btn-save-custom-modal" type="button" class="btn-primary" style="margin-top: 10px;">
+          Klar & Spara
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skript -->
+  <script src="words.js"></script>
+  <script src="audio.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

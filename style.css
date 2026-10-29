@@ -1,0 +1,1260 @@
+/* ==========================================================================
+   Säg det bara! – Styling för mobil och surfplatta (Pass-and-Play)
+   ========================================================================== */
+
+:root {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card: #1e293b;
+  --bg-card-border: rgba(255, 255, 255, 0.08);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --color-green: #10b981;
+  --color-green-light: #34d399;
+  --color-green-dark: #059669;
+  --color-green-glow: rgba(16, 185, 129, 0.35);
+
+  --color-red: #ef4444;
+  --color-red-light: #f87171;
+  --color-red-dark: #dc2626;
+  --color-red-glow: rgba(239, 68, 68, 0.35);
+
+  --color-accent: #6366f1;
+  --color-accent-light: #818cf8;
+  --color-accent-dark: #4f46e5;
+  --color-gold: #f59e0b;
+  --color-orange: #f97316;
+
+  --team-blue: #3b82f6;
+  --team-red: #ef4444;
+  --team-green: #10b981;
+  --team-yellow: #f59e0b;
+  --team-purple: #8b5cf6;
+  --team-pink: #ec4899;
+
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow-x: hidden;
+}
+
+#app {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  position: relative;
+  min-height: 100dvh;
+  padding: var(--safe-top) 16px var(--safe-bottom) 16px;
+}
+
+/* ==========================================================================
+   Vyer (Screen Containers)
+   ========================================================================== */
+.view {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.view.active {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0 12px 0;
+  border-bottom: 1px solid var(--bg-card-border);
+}
+
+.app-logo {
+  font-size: 1.45rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #a5b4fc, #818cf8, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 1.2rem;
+}
+
+.icon-btn:active {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* ==========================================================================
+   Typografi & Formulärkomponenter
+   ========================================================================== */
+h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+p.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 24px;
+}
+
+.section-box {
+  background: var(--bg-secondary);
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid var(--bg-card-border);
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Valchips / Radioknappar */
+.chip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  gap: 10px;
+}
+
+.chip-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid transparent;
+  color: var(--text-secondary);
+  padding: 12px 8px;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.chip-btn.active {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+/* Ordpaket-grid */
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.package-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 12px 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+}
+
+.package-card.active {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: var(--color-accent);
+}
+
+.package-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.package-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.package-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.package-check {
+  font-size: 1.1rem;
+  opacity: 0.3;
+}
+
+.package-card.active .package-check {
+  opacity: 1;
+}
+
+/* Toggle Switch */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.toggle-label {
+  display: flex;
+  flex-direction: column;
+}
+
+.toggle-label span.main {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.toggle-label span.desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 52px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  transition: background 0.25s ease;
+}
+
+.toggle-switch.active {
+  background: var(--color-accent);
+}
+
+.toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-switch.active .toggle-knob {
+  transform: translateX(22px);
+}
+
+/* ==========================================================================
+   Laglista (Inställningar)
+   ========================================================================== */
+.team-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 10px 14px;
+  border-radius: 14px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.team-color-picker {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.team-name-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  outline: none;
+  padding: 4px 0;
+}
+
+.team-name-input:focus {
+  border-bottom: 1px solid var(--color-accent);
+}
+
+.btn-remove-team {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.15s ease;
+}
+
+.btn-remove-team:hover {
+  color: var(--color-red-light);
+}
+
+.btn-add-team {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  color: var(--color-accent-light);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-add-team:active {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: var(--color-accent);
+}
+
+/* ==========================================================================
+   Stora Knappar
+   ========================================================================== */
+.btn-primary {
+  width: 100%;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  touch-action: manipulation;
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+  box-shadow: 0 5px 15px -3px rgba(99, 102, 241, 0.4);
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  border-radius: 16px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  touch-action: manipulation;
+}
+
+.btn-secondary:active {
+  background: rgba(255, 255, 255, 0.14);
+  transform: scale(0.98);
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.18) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  color: var(--color-red-light) !important;
+}
+
+.btn-danger:active {
+  background: rgba(239, 68, 68, 0.3) !important;
+}
+
+/* ==========================================================================
+   Pass-and-play Ready View (Redo för runda)
+   ========================================================================== */
+.ready-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 24px 8px;
+}
+
+.team-badge-large {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 20px;
+  border-radius: 40px;
+  background: rgba(255, 255, 255, 0.08);
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+}
+
+.team-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+
+.ready-title {
+  font-size: 2.4rem;
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.ready-instruction {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 320px;
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.ready-stats-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 20px;
+  padding: 18px 24px;
+  display: flex;
+  gap: 32px;
+  margin-bottom: 36px;
+}
+
+.ready-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ready-stat-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.ready-stat-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   Spelomgång (Game View)
+   ========================================================================== */
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0 12px 0;
+}
+
+.game-team-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-team-name {
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+/* Timer Bar & Cirkel */
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px 0 16px 0;
+  position: relative;
+}
+
+.timer-number {
+  font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.3s ease;
+}
+
+.timer-warning {
+  color: var(--color-red) !important;
+  animation: pulse-timer 0.6s infinite alternate;
+}
+
+@keyframes pulse-timer {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.12); }
+}
+
+.timer-bar-wrap {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.timer-bar-fill {
+  height: 100%;
+  width: 100%;
+  background: var(--color-green);
+  border-radius: 10px;
+  transition: width 0.1s linear, background-color 0.4s ease;
+}
+
+/* Poängdisplay under runda */
+.round-live-score {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.live-badge-correct {
+  color: var(--color-green-light);
+  background: rgba(16, 185, 129, 0.15);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.live-badge-pass {
+  color: var(--color-red-light);
+  background: rgba(239, 68, 68, 0.15);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* ==========================================================================
+   Spelkort (Word Card) med Swipe & 3D Tilt
+   ========================================================================== */
+.card-arena {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  perspective: 1000px;
+  margin-bottom: 20px;
+  touch-action: none;
+}
+
+.word-card {
+  width: 100%;
+  height: 100%;
+  max-height: 380px;
+  min-height: 250px;
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 24px;
+  text-align: center;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
+  position: relative;
+  cursor: grab;
+  will-change: transform, opacity;
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+.word-card:active {
+  cursor: grabbing;
+}
+
+.card-category-badge {
+  position: absolute;
+  top: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 6px 16px;
+  border-radius: 30px;
+}
+
+.word-text {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  word-break: break-word;
+  padding: 0 10px;
+  transition: transform 0.2s ease;
+}
+
+.card-gesture-hint {
+  position: absolute;
+  bottom: 18px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Stämplar vid swipe (RÄTT / PASS) */
+.stamp {
+  position: absolute;
+  top: 30px;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+  z-index: 10;
+}
+
+.stamp-correct {
+  right: 25px;
+  border: 4px solid var(--color-green);
+  color: var(--color-green);
+  background: rgba(16, 185, 129, 0.2);
+  transform: rotate(12deg);
+}
+
+.stamp-pass {
+  left: 25px;
+  border: 4px solid var(--color-red);
+  color: var(--color-red);
+  background: rgba(239, 68, 68, 0.2);
+  transform: rotate(-12deg);
+}
+
+/* Animationer för kortkast */
+.word-card.anim-fly-right {
+  transform: translate3d(150vw, -30px, 0) rotate(35deg) !important;
+  opacity: 0 !important;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out !important;
+}
+
+.word-card.anim-fly-left {
+  transform: translate3d(-150vw, 30px, 0) rotate(-35deg) !important;
+  opacity: 0 !important;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out !important;
+}
+
+.word-card.anim-fly-up {
+  transform: translate3d(0, -150vh, 0) scale(0.8) !important;
+  opacity: 0 !important;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out !important;
+}
+
+.word-card.anim-fly-down {
+  transform: translate3d(0, 150vh, 0) scale(0.8) !important;
+  opacity: 0 !important;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out !important;
+}
+
+.word-card.anim-enter {
+  animation: card-enter 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes card-enter {
+  0% {
+    transform: scale(0.85) translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Spelknappar: Rätt & Pass
+   ========================================================================== */
+.game-controls {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 14px;
+  padding-bottom: 16px;
+}
+
+.btn-game {
+  height: 78px;
+  border: none;
+  border-radius: 22px;
+  font-size: 1.35rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.1s ease, filter 0.1s ease, box-shadow 0.15s ease;
+}
+
+.btn-game:active {
+  transform: scale(0.95);
+}
+
+.btn-game-pass {
+  background: rgba(239, 68, 68, 0.16);
+  border: 2px solid rgba(239, 68, 68, 0.4);
+  color: var(--color-red-light);
+}
+
+.btn-game-pass:active {
+  background: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 0 20px var(--color-red-glow);
+}
+
+.btn-game-correct {
+  background: linear-gradient(135deg, var(--color-green), var(--color-green-dark));
+  color: #fff;
+  box-shadow: 0 10px 25px -4px var(--color-green-glow);
+}
+
+.btn-game-correct:active {
+  box-shadow: 0 4px 15px var(--color-green-glow);
+}
+
+/* ==========================================================================
+   Sammanfattning efter runda (Review)
+   ========================================================================== */
+.review-header {
+  text-align: center;
+  padding: 12px 0 18px 0;
+}
+
+.review-score-banner {
+  background: var(--bg-secondary);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 20px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.review-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.review-stat-val {
+  font-size: 1.8rem;
+  font-weight: 900;
+}
+
+.review-stat-lbl {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+.review-list {
+  flex: 1;
+  overflow-y: auto;
+  max-height: calc(100vh - 360px);
+  padding-right: 4px;
+  margin-bottom: 16px;
+}
+
+.review-hint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.review-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-secondary);
+  border: 1px solid var(--bg-card-border);
+  padding: 14px 16px;
+  border-radius: 16px;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+
+.review-item-word {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.review-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+}
+
+.review-toggle-btn:active {
+  transform: scale(0.94);
+}
+
+.review-toggle-correct {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--color-green-light);
+  border: 1px solid var(--color-green);
+}
+
+.review-toggle-pass {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--color-red-light);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* ==========================================================================
+   Poängställning (Scoreboard) & Stege
+   ========================================================================== */
+.scoreboard-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+  overflow-y: auto;
+}
+
+.team-score-card {
+  background: var(--bg-secondary);
+  border-radius: 20px;
+  padding: 18px 20px;
+  border: 1px solid var(--bg-card-border);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.team-score-card.is-active {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+.team-score-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.team-score-name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.team-score-points {
+  font-size: 1.8rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.team-progress-bar {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.team-progress-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Vinstskärm (Victory View) & Konfetti
+   ========================================================================== */
+.victory-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px 12px;
+  position: relative;
+}
+
+.trophy-icon {
+  font-size: 5rem;
+  margin-bottom: 16px;
+  animation: bounce-trophy 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes bounce-trophy {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-12px) scale(1.08); }
+}
+
+.victory-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #fef08a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.victory-team-name {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 24px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.stat-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 16px;
+  padding: 16px 12px;
+}
+
+.stat-box-num {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #fff;
+}
+
+.stat-box-lbl {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* ==========================================================================
+   Paus-overlay & Stoppa Runda Meny
+   ========================================================================== */
+.pause-overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 50;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+}
+
+.pause-overlay.active {
+  display: flex;
+}
+
+.pause-menu-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 340px;
+}
+
+/* ==========================================================================
+   SUDDEN DEATH-VY (Blixtrunda vid oavgjort)
+   ========================================================================== */
+.sudden-death-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px 16px;
+  position: relative;
+}
+
+.sudden-death-icon {
+  font-size: 5rem;
+  animation: pulse-fire 0.8s infinite alternate;
+  margin-bottom: 16px;
+}
+
+@keyframes pulse-fire {
+  0% { transform: scale(1) rotate(-5deg); filter: drop-shadow(0 0 15px #f97316); }
+  100% { transform: scale(1.15) rotate(5deg); filter: drop-shadow(0 0 35px #ef4444); }
+}
+
+.sudden-death-title {
+  font-size: 2.8rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #f97316, #ef4444, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+}
+
+.sudden-death-desc {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 360px;
+  margin-bottom: 28px;
+}
+
+.sudden-death-teams-box {
+  width: 100%;
+  max-width: 360px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 20px;
+  padding: 16px 20px;
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ==========================================================================
+   Modal för Egna Ord
+   ========================================================================== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--bg-secondary);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+}
+
+.modal-header {
+  padding: 20px 20px 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--bg-card-border);
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.custom-words-input-wrap {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.custom-word-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1rem;
+  padding: 12px 14px;
+  outline: none;
+}
+
+.custom-word-input:focus {
+  border-color: var(--color-accent);
+}
+
+.custom-words-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  padding: 4px;
+}
+
+.custom-word-tag {
+  background: rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.custom-word-tag-remove {
+  cursor: pointer;
+  color: var(--color-red-light);
+  font-weight: bold;
+}
+
+/* ==========================================================================
+   Responsivitet för surfplatta och större skärmar
+   ========================================================================== */
+@media (min-width: 600px) {
+  .word-text {
+    font-size: 3.5rem;
+  }
+  .word-card {
+    max-height: 440px;
+  }
+  .btn-game {
+    height: 88px;
+    font-size: 1.5rem;
+  }
+  .timer-number {
+    font-size: 4.8rem;
+  }
+}
