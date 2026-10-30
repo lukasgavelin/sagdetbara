@@ -1,9 +1,9 @@
 /**
- * Webb Audio API Ljudsyntetisator för "Säg det bara!"
+ * Web Audio API Ljudsyntetisator för "Säg det bara!"
  * Helt offline och utan externa ljudfiler
  * @license MIT
  */
-class SoundEffects {
+export class SoundEffects {
   constructor() {
     this.ctx = null;
     this.enabled = true;
@@ -13,7 +13,7 @@ class SoundEffects {
    * Säker initiering av AudioContext (körs vid första användarinteraktion)
    */
   init() {
-    if (!this.ctx) {
+    if (!this.ctx && typeof window !== 'undefined') {
       try {
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         if (AudioCtx) {
@@ -62,7 +62,7 @@ class SoundEffects {
 
       osc.start(now);
       osc.stop(now + 0.28);
-    } catch (e) {
+    } catch {
       // Ignorera ljudfel om audio blockeras av webbläsaren
     }
   }
@@ -92,7 +92,7 @@ class SoundEffects {
 
       osc.start(now);
       osc.stop(now + 0.2);
-    } catch (e) {}
+    } catch {}
   }
 
   /**
@@ -120,7 +120,7 @@ class SoundEffects {
 
       osc.start(now);
       osc.stop(now + 0.08);
-    } catch (e) {}
+    } catch {}
   }
 
   /**
@@ -150,7 +150,7 @@ class SoundEffects {
         osc.start(now + delay);
         osc.stop(now + delay + 0.16);
       });
-    } catch (e) {}
+    } catch {}
   }
 
   /**
@@ -188,8 +188,11 @@ class SoundEffects {
 
         t += note.d + 0.04;
       });
-    } catch (e) {}
+    } catch {}
   }
 }
 
-window.soundEffects = new SoundEffects();
+export const soundEffects = new SoundEffects();
+if (typeof window !== 'undefined') {
+  window.soundEffects = soundEffects;
+}

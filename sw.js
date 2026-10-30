@@ -1,13 +1,20 @@
 // Service Worker för Säg det bara!
-const CACHE_NAME = 'sag-det-bara-v2';
+const CACHE_NAME = 'sag-det-bara-v3';
+
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './style.css',
-  './app.js',
-  './audio.js',
   './words.js',
-  './words.json',
+  './js/app.js',
+  './js/audio.js',
+  './js/config.js',
+  './js/game-state.js',
+  './js/storage.js',
+  './js/text.js',
+  './js/timer.js',
+  './js/wake-lock.js',
+  './js/word-pool.js',
   './icon.svg',
   './icon-192.png',
   './icon-512.png',
@@ -36,21 +43,49 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener('fetch', (event) => {
-  // Endast GET-förfrågningar
   if (event.request.method !== 'GET') return;
 
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(event.request).catch(() => {
-        // Om offline och resursen är ett html-dokument
-        if (event.request.headers.get('accept')?.includes('text/html')) {
-          return caches.match('./index.html');
-        }
-      });
-    })
-  );
+  const url = new URL(event.request.url);
+
+  // HTML / Navigation requests: Network first, fall back to cached index.html
+  if (event.request.mode === 'navigate' || event.request.headers.get('accept')?.includes('text/html')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
+
+  // Same-origin static assets: Stale-While-Revalidate
+  if (url.origin === self.location.origin) {
+    event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+        const fetchPromise = fetch(event.request)
+          .then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200) {
+              const responseClone = networkResponse.clone();
+              caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
+            }
+            return networkResponse;
+          })
+          .catch(() => cachedResponse);
+
+        return cachedResponse || fetchPromise;
+      })
+    );
+  }
 });
