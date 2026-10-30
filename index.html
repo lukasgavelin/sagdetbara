@@ -26,6 +26,9 @@
         <span aria-hidden="true">⚡</span> SÄG DET BARA!
       </div>
       <div class="header-actions">
+        <button id="header-home-btn" class="icon-btn" title="Avsluta match och gå till start" aria-label="Avsluta match och gå till start" style="display: none;">
+          🏠
+        </button>
         <button id="header-sound-toggle" class="icon-btn" title="Slå av/på ljud" aria-label="Ljudinställning">
           🔊
         </button>
@@ -76,15 +79,15 @@
           <button type="button" class="package-card active" data-package="standard" aria-pressed="true">
             <div class="package-info">
               <span class="package-name">🌟 Standard</span>
-              <span class="package-desc">Blandat & vardag (400+ ord)</span>
+              <span class="package-desc">Blandat • 408 ord</span>
             </div>
             <span class="package-check" aria-hidden="true">✓</span>
           </button>
 
           <button type="button" class="package-card active" data-package="party" aria-pressed="true">
             <div class="package-info">
-              <span class="package-name">🎉 Party & Fest</span>
-              <span class="package-desc">Slang, drinkar & nattliv (200+ ord)</span>
+              <span class="package-name">🎉 Party</span>
+              <span class="package-desc">Fest & slang • 208 ord</span>
             </div>
             <span class="package-check" aria-hidden="true">✓</span>
           </button>
@@ -92,15 +95,15 @@
           <button type="button" class="package-card" data-package="familj" aria-pressed="false">
             <div class="package-info">
               <span class="package-name">👨‍👩‍👧 Familj</span>
-              <span class="package-desc">Lättsamt för alla åldrar (250+ ord)</span>
+              <span class="package-desc">Alla åldrar • 250 ord</span>
             </div>
             <span class="package-check" aria-hidden="true">✓</span>
           </button>
 
           <button type="button" class="package-card" data-package="klurigt" aria-pressed="false">
             <div class="package-info">
-              <span class="package-name">🧠 Nörd & Klurigt</span>
-              <span class="package-desc">Vetenskap & paradoxer (160+ ord)</span>
+              <span class="package-name">🧠 Klurigt</span>
+              <span class="package-desc">Vetenskap • 160 ord</span>
             </div>
             <span class="package-check" aria-hidden="true">✓</span>
           </button>
@@ -217,9 +220,14 @@
           </div>
         </div>
 
-        <button id="btn-begin-round" type="button" class="btn-primary">
-          Börja runda! ⏱️
-        </button>
+        <div class="ready-actions">
+          <button id="btn-begin-round" type="button" class="btn-primary">
+            Börja runda! ⏱️
+          </button>
+          <button id="btn-ready-quit" type="button" class="btn-secondary">
+            Avsluta match ⚙️
+          </button>
+        </div>
       </div>
     </main>
 
@@ -294,6 +302,9 @@
           <button id="btn-discard-round" type="button" class="btn-secondary btn-danger">
             🔄 Kasta rundan / Gör om
           </button>
+          <button id="btn-pause-quit" type="button" class="btn-secondary">
+            🚪 Avsluta matchen helt
+          </button>
         </div>
       </div>
     </main>
@@ -352,6 +363,9 @@
         <button id="btn-next-round" type="button" class="btn-primary">
           Nästa lag kör! 🚀
         </button>
+        <button id="btn-scoreboard-quit" type="button" class="btn-secondary">
+          Avsluta matchen
+        </button>
       </div>
     </main>
 
@@ -370,9 +384,14 @@
           <!-- Dynamiskt fylls i med de oavgjorda lagen -->
         </div>
 
-        <button id="btn-start-sudden-death" type="button" class="btn-primary">
-          Kör Blixtrunda! ⚡
-        </button>
+        <div class="sudden-death-actions">
+          <button id="btn-start-sudden-death" type="button" class="btn-primary">
+            Kör Blixtrunda! ⚡
+          </button>
+          <button id="btn-sudden-death-quit" type="button" class="btn-secondary">
+            Avsluta matchen
+          </button>
+        </div>
       </div>
     </main>
 
@@ -450,6 +469,29 @@
         <button id="btn-save-custom-modal" type="button" class="btn-primary">
           Klar & Spara
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       Modal: Bekräfta Avsluta Match
+       ==================================================================== -->
+  <div id="confirm-quit-modal" class="modal-overlay">
+    <div class="modal-content confirm-modal-box">
+      <div class="modal-body confirm-modal-body">
+        <div class="confirm-modal-icon">🏠</div>
+        <h2>Avsluta matchen?</h2>
+        <p class="subtitle">
+          Matchen sparas automatiskt så att ni kan återuppta den när som helst från startsidan.
+        </p>
+        <div class="confirm-modal-actions">
+          <button id="btn-confirm-quit-yes" type="button" class="btn-primary btn-danger">
+            Ja, avsluta matchen
+          </button>
+          <button id="btn-confirm-quit-no" type="button" class="btn-secondary">
+            Fortsätt spela
+          </button>
+        </div>
       </div>
     </div>
   </div>

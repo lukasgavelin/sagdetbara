@@ -98,6 +98,7 @@ export class AliasApp {
       readyRoundNum: document.getElementById('ready-round-num'),
       readyTeamScore: document.getElementById('ready-team-score'),
       btnBeginRound: document.getElementById('btn-begin-round'),
+      btnReadyQuit: document.getElementById('btn-ready-quit'),
 
       // Game View
       gameTeamDot: document.getElementById('game-team-dot'),
@@ -118,6 +119,7 @@ export class AliasApp {
       btnResume: document.getElementById('btn-resume-game'),
       btnFinishEarly: document.getElementById('btn-finish-early'),
       btnDiscardRound: document.getElementById('btn-discard-round'),
+      btnPauseQuit: document.getElementById('btn-pause-quit'),
 
       // Review View
       reviewTeamName: document.getElementById('review-team-name'),
@@ -131,10 +133,12 @@ export class AliasApp {
       scoreboardList: document.getElementById('scoreboard-list'),
       scoreboardTargetHint: document.getElementById('scoreboard-target-hint'),
       btnNextRound: document.getElementById('btn-next-round'),
+      btnScoreboardQuit: document.getElementById('btn-scoreboard-quit'),
 
       // Sudden Death View
       suddenDeathTeams: document.getElementById('sudden-death-teams'),
       btnStartSuddenDeath: document.getElementById('btn-start-sudden-death'),
+      btnSuddenDeathQuit: document.getElementById('btn-sudden-death-quit'),
 
       // Victory View
       victoryTeamName: document.getElementById('victory-team-name'),
@@ -145,7 +149,11 @@ export class AliasApp {
       btnPlayAgainSame: document.getElementById('btn-play-again-same'),
       btnPlayNewGame: document.getElementById('btn-play-new-game'),
 
-      // Header controls & Toast container
+      // Header controls, Avsluta modal & Toast container
+      headerHomeBtn: document.getElementById('header-home-btn'),
+      confirmQuitModal: document.getElementById('confirm-quit-modal'),
+      btnConfirmQuitYes: document.getElementById('btn-confirm-quit-yes'),
+      btnConfirmQuitNo: document.getElementById('btn-confirm-quit-no'),
       headerSoundToggle: document.getElementById('header-sound-toggle'),
       confettiCanvas: document.getElementById('confetti-canvas'),
       toastContainer: document.getElementById('toast-container')
@@ -230,7 +238,44 @@ export class AliasApp {
       }
     });
 
+    // Visa hem-ikon i headern när man är inne i en pågående match
+    if (this.dom.headerHomeBtn) {
+      this.dom.headerHomeBtn.style.display = (viewName === 'settings' || viewName === 'victory') ? 'none' : 'flex';
+    }
+
     window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  requestQuitGame() {
+    if (this.currentView === 'settings') return;
+    if (this.dom.confirmQuitModal) {
+      this.dom.confirmQuitModal.classList.add('active');
+    }
+  }
+
+  closeConfirmQuitModal() {
+    if (this.dom.confirmQuitModal) {
+      this.dom.confirmQuitModal.classList.remove('active');
+    }
+  }
+
+  confirmQuitGame() {
+    this.closeConfirmQuitModal();
+    this.timer.stop();
+    this.wakeLock.release();
+
+    if (this.game) {
+      this.storage.saveGame(this.game.toJSON());
+    }
+
+    this.isPaused = false;
+    if (this.dom.pauseOverlay) {
+      this.dom.pauseOverlay.classList.remove('active');
+    }
+
+    this.checkSavedGame();
+    this.showView('settings');
+    this.showToast('Matchen har sparats. Du kan återuppta den när som helst!');
   }
 
   // =========================================================================
@@ -1096,6 +1141,30 @@ export class AliasApp {
     this.dom.btnFinishEarly.addEventListener('click', () => this.finishRoundEarly());
     this.dom.btnDiscardRound.addEventListener('click', () => this.discardRound());
 
+    // Avsluta match triggers
+    if (this.dom.headerHomeBtn) {
+      this.dom.headerHomeBtn.addEventListener('click', () => this.requestQuitGame());
+    }
+    if (this.dom.btnReadyQuit) {
+      this.dom.btnReadyQuit.addEventListener('click', () => this.requestQuitGame());
+    }
+    if (this.dom.btnPauseQuit) {
+      this.dom.btnPauseQuit.addEventListener('click', () => this.requestQuitGame());
+    }
+    if (this.dom.btnScoreboardQuit) {
+      this.dom.btnScoreboardQuit.addEventListener('click', () => this.requestQuitGame());
+    }
+    if (this.dom.btnSuddenDeathQuit) {
+      this.dom.btnSuddenDeathQuit.addEventListener('click', () => this.requestQuitGame());
+    }
+
+    if (this.dom.btnConfirmQuitYes) {
+      this.dom.btnConfirmQuitYes.addEventListener('click', () => this.confirmQuitGame());
+    }
+    if (this.dom.btnConfirmQuitNo) {
+      this.dom.btnConfirmQuitNo.addEventListener('click', () => this.closeConfirmQuitModal());
+    }
+
     // Review & Scoreboard
     this.dom.btnConfirmRound.addEventListener('click', () => this.confirmRoundScore());
     this.dom.btnNextRound.addEventListener('click', () => this.showReadyView());
@@ -1131,7 +1200,11 @@ export class AliasApp {
     // B3 fix: Tangentbord lyssnar endast när rundan är aktiv och INTE pausad
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        if (this.dom.customWordsModal.classList.contains('active')) {
+        if (this.dom.confirmQuitModal?.classList.contains('active')) {
+          this.closeConfirmQuitModal();
+          return;
+        }
+        if (this.dom.customWordsModal?.classList.contains('active')) {
           closeCustomModal();
           return;
         }

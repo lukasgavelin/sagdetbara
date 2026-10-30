@@ -46,6 +46,11 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+button, input, select, textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
 body {
   font-family: var(--font-family);
   background-color: var(--bg-primary);
@@ -183,21 +188,23 @@ p.subtitle {
 /* Valchips / Radioknappar */
 .chip-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
+  gap: 8px;
 }
 
 .chip-btn {
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid transparent;
   color: var(--text-secondary);
-  padding: 12px 8px;
+  padding: 10px 6px;
   border-radius: 14px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
   text-align: center;
   transition: all 0.2s ease;
+  min-width: 0;
+  width: 100%;
 }
 
 .chip-btn.active {
@@ -210,20 +217,31 @@ p.subtitle {
 /* Ordpaket-grid */
 .package-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+}
+
+@media (max-width: 380px) {
+  .package-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .package-card {
   background: rgba(255, 255, 255, 0.04);
   border: 2px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
-  padding: 12px 14px;
+  padding: 12px 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   transition: all 0.2s ease;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  text-align: left;
 }
 
 .package-card.active {
@@ -234,26 +252,41 @@ p.subtitle {
 .package-info {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
 }
 
 .package-name {
   font-weight: 700;
   font-size: 0.95rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .package-desc {
   font-size: 0.75rem;
   color: var(--text-muted);
-  margin-top: 2px;
+  margin-top: 3px;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .package-check {
   font-size: 1.1rem;
   opacity: 0.3;
+  flex-shrink: 0;
+  width: 18px;
+  text-align: right;
 }
 
 .package-card.active .package-check {
   opacity: 1;
+  color: var(--color-accent-light);
 }
 
 /* Toggle Switch */
@@ -1436,4 +1469,35 @@ dialog.modal-dialog::backdrop {
   width: auto;
   padding: 12px 18px;
   font-size: 1rem;
+}
+
+/* Knappar för att avbryta/avsluta match */
+.ready-actions,
+.sudden-death-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.confirm-modal-box {
+  max-width: 380px;
+  text-align: center;
+}
+
+.confirm-modal-body {
+  padding: 28px 22px;
+}
+
+.confirm-modal-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.confirm-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
 }
