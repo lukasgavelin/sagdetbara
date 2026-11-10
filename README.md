@@ -4,75 +4,6 @@ Ett snabbt sällskapsspel på svenska, optimerat för pass-and-play på mobil, s
 
 ---
 
-## Deploy till Cloudflare Pages
-
-Applikationen är förberedd för publicering på Cloudflare Pages:
-- Inkluderar `_headers` med Content-Security-Policy (CSP), HSTS och anpassade cache-huvuden för Service Worker och statiska tillgångar.
-- Inkluderar `wrangler.toml` för deploy via Wrangler CLI eller automatiserade CI/CD-pipelines.
-- Inkluderar PWA-ikoner (`icon-192.png`, `icon-512.png`, `icon.svg`), `manifest.webmanifest` och `sw.js` (stale-while-revalidate och offline-cache).
-
-### Metod 1: Koppla Git-arkiv till Cloudflare Dashboard
-1. Gå till Cloudflare Dashboard och välj Workers & Pages -> Create application -> Pages -> Connect to Git.
-2. Välj arkivet: `lukasgavelin/sagdetbara`.
-3. I bygginställningarna (Build settings):
-   - Framework preset: None
-   - Build command: (lämna tomt)
-   - Build output directory: `.` (eller lämna tomt för rotkatalogen)
-4. Spara och driftsätt.
-
-### Metod 2: Deploy via Wrangler CLI
-Kör i projektkatalogen:
-```bash
-npx wrangler pages deploy . --project-name=sagdetbara
-```
-
----
-
-## Lokal utveckling och tester
-
-Applikationen bygger på moderna ES-moduler utan krav på byggsteg eller bundlers. För lokal utveckling körs en lokal HTTP-server:
-
-```bash
-# Starta lokal utvecklingsserver
-npx serve .
-# alternativt
-python3 -m http.server 8080
-```
-
-### Automatiserade tester och validering
-
-Projektet har automatiserade tester som körs med Node.js inbyggda testkörare (`node --test`), samt ordbanksvalidering:
-
-```bash
-# Kör samtliga 20 enhetstester
-npm test
-
-# Validera ordbanken (kontroll av dubbletter, paket, längd och blockerade ord)
-npm run validate-words
-
-# Bumpa Service Worker-cacheversion (sw.js) inför release
-npm run bump-version
-```
-
----
-
-## Arkitektur och moduler
-
-Källkoden är uppdelad i ren affärslogik frikopplad från DOM, samt presentations- och interaktionsmoduler:
-
-- `js/config.js`: Global konfiguration, intervallgränser, färger, ordpaket och standardinställningar.
-- `js/game-state.js`: Spellogik, laghantering, poängräkning, förklarar-rotation, serialisering och Sudden Death. Helt frikopplad från webbläsarens DOM.
-- `js/timer.js` (`RoundTimer`): Tidsdrift-säker rundtimer baserad på `performance.now()` och absolut sluttid, vilket eliminerar felmarginaler när fliken körs i bakgrunden.
-- `js/word-pool.js` (`WordPool`): Filtrering av ord baserat på paket och svårighetsgrad, sammanfogning med egna ord och slumpmässig utdelning via Fisher-Yates-blandning.
-- `js/storage.js`: Typvalidering, sanering och persistens i `localStorage` för inställningar, egna ord och matchtillstånd.
-- `js/wake-lock.js` (`WakeLockManager`): Hanterar Screen Wake Lock API för att förhindra att enhetens skärm stängs av under pågående runda.
-- `js/audio.js` (`SoundEffects`): Ljudeffekter syntetiserade med Web Audio API utan externa ljudfiler.
-- `js/text.js`: Normalisering av textsträngar, svensk genitivböjning och skiftlägesoberoende nycklar.
-- `js/app.js` (`AliasApp`): UI-styrning, vy-växling, händelsehantering, drag- och svepgester samt historiknavigering.
-- `words.js`: Ordbas med 1 095 ord fördelade på paket, kategorier och svårighetsgrader.
-
----
-
 ## Funktioner
 
 ### 1. Ordpaket och teman (1 095 ord)
@@ -119,3 +50,72 @@ Pågående matchläge sparas automatiskt i webbläsarens lokala lagring. Om sida
   - Svep eller dra kortet åt höger/uppåt för Rätt (+1).
   - Svep eller dra kortet åt vänster/nedåt för Pass (0 eller -1).
   - Piltangenter eller mellanslag vid tangentbordsstyrning.
+
+---
+
+## Arkitektur och moduler
+
+Källkoden är uppdelad i ren affärslogik frikopplad från DOM, samt presentations- och interaktionsmoduler:
+
+- `js/config.js`: Global konfiguration, intervallgränser, färger, ordpaket och standardinställningar.
+- `js/game-state.js`: Spellogik, laghantering, poängräkning, förklarar-rotation, serialisering och Sudden Death. Helt frikopplad från webbläsarens DOM.
+- `js/timer.js` (`RoundTimer`): Tidsdrift-säker rundtimer baserad på `performance.now()` och absolut sluttid, vilket eliminerar felmarginaler när fliken körs i bakgrunden.
+- `js/word-pool.js` (`WordPool`): Filtrering av ord baserat på paket och svårighetsgrad, sammanfogning med egna ord och slumpmässig utdelning via Fisher-Yates-blandning.
+- `js/storage.js`: Typvalidering, sanering och persistens i `localStorage` för inställningar, egna ord och matchtillstånd.
+- `js/wake-lock.js` (`WakeLockManager`): Hanterar Screen Wake Lock API för att förhindra att enhetens skärm stängs av under pågående runda.
+- `js/audio.js` (`SoundEffects`): Ljudeffekter syntetiserade med Web Audio API utan externa ljudfiler.
+- `js/text.js`: Normalisering av textsträngar, svensk genitivböjning och skiftlägesoberoende nycklar.
+- `js/app.js` (`AliasApp`): UI-styrning, vy-växling, händelsehantering, drag- och svepgester samt historiknavigering.
+- `words.js`: Ordbas med 1 095 ord fördelade på paket, kategorier och svårighetsgrader.
+
+---
+
+## Lokal utveckling och tester
+
+Applikationen bygger på moderna ES-moduler utan krav på byggsteg eller bundlers. För lokal utveckling körs en lokal HTTP-server:
+
+```bash
+# Starta lokal utvecklingsserver
+npx serve .
+# alternativt
+python3 -m http.server 8080
+```
+
+### Automatiserade tester och validering
+
+Projektet har automatiserade tester som körs med Node.js inbyggda testkörare (`node --test`), samt ordbanksvalidering:
+
+```bash
+# Kör samtliga 20 enhetstester
+npm test
+
+# Validera ordbanken (kontroll av dubbletter, paket, längd och blockerade ord)
+npm run validate-words
+
+# Bumpa Service Worker-cacheversion (sw.js) inför release
+npm run bump-version
+```
+
+---
+
+## Deploy till Cloudflare Pages
+
+Applikationen är förberedd för publicering på Cloudflare Pages:
+- Inkluderar `_headers` med Content-Security-Policy (CSP), HSTS och anpassade cache-huvuden för Service Worker och statiska tillgångar.
+- Inkluderar `wrangler.toml` för deploy via Wrangler CLI eller automatiserade CI/CD-pipelines.
+- Inkluderar PWA-ikoner (`icon-192.png`, `icon-512.png`, `icon.svg`), `manifest.webmanifest` och `sw.js` (stale-while-revalidate och offline-cache).
+
+### Metod 1: Koppla Git-arkiv till Cloudflare Dashboard
+1. Gå till Cloudflare Dashboard och välj Workers & Pages -> Create application -> Pages -> Connect to Git.
+2. Välj arkivet: `lukasgavelin/sagdetbara`.
+3. I bygginställningarna (Build settings):
+   - Framework preset: None
+   - Build command: (lämna tomt)
+   - Build output directory: `.` (eller lämna tomt för rotkatalogen)
+4. Spara och driftsätt.
+
+### Metod 2: Deploy via Wrangler CLI
+Kör i projektkatalogen:
+```bash
+npx wrangler pages deploy . --project-name=sagdetbara
+```
