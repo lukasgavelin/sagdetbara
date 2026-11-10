@@ -9,6 +9,18 @@
   <meta name="apple-mobile-web-app-title" content="Säg det bara!">
   <meta name="application-name" content="Säg det bara!">
   <meta name="description" content="Säg det bara! – Blixtsnabbt ordförklaringsspel för sällskapet.">
+  
+  <!-- Open Graph & Social sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Säg det bara! ⚡🗣️">
+  <meta property="og:description" content="Blixtsnabbt ordförklaringsspel för sällskapet på svenska. Spela direkt i mobilen utan installation!">
+  <meta property="og:image" content="icon-512.png">
+  <meta property="og:url" content="https://sagdetbara.pages.dev/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Säg det bara! ⚡🗣️">
+  <meta name="twitter:description" content="Blixtsnabbt ordförklaringsspel för sällskapet på svenska. Spela direkt i mobilen utan installation!">
+  <meta name="twitter:image" content="icon-512.png">
+
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -79,7 +91,7 @@
           <button type="button" class="package-card active" data-package="standard" aria-pressed="true">
             <div class="package-info">
               <span class="package-name">🌟 Standard</span>
-              <span class="package-desc">Blandat • 408 ord</span>
+              <span class="package-desc">Blandat • 441 ord</span>
             </div>
             <span class="package-check" aria-hidden="true">✓</span>
           </button>
@@ -87,7 +99,7 @@
           <button type="button" class="package-card active" data-package="party" aria-pressed="true">
             <div class="package-info">
               <span class="package-name">🎉 Party</span>
-              <span class="package-desc">Fest & slang • 208 ord</span>
+              <span class="package-desc">Fest & slang • 223 ord</span>
             </div>
             <span class="package-check" aria-hidden="true">✓</span>
           </button>
@@ -103,7 +115,7 @@
           <button type="button" class="package-card" data-package="klurigt" aria-pressed="false">
             <div class="package-info">
               <span class="package-name">🧠 Klurigt</span>
-              <span class="package-desc">Vetenskap • 160 ord</span>
+              <span class="package-desc">Vetenskap • 181 ord</span>
             </div>
             <span class="package-check" aria-hidden="true">✓</span>
           </button>
@@ -132,6 +144,7 @@
           <span>Målställning (Poäng för vinst)</span>
         </div>
         <div class="chip-grid">
+          <button type="button" class="chip-btn" data-target-score="20">20 p</button>
           <button type="button" class="chip-btn" data-target-score="30">30 p</button>
           <button type="button" class="chip-btn active" data-target-score="50">50 p</button>
           <button type="button" class="chip-btn" data-target-score="80">80 p</button>
@@ -205,6 +218,18 @@
         </div>
 
         <h2 class="ready-title"><span id="ready-team-name">Lag Blås</span> tur!</h2>
+        
+        <div id="ready-player-banner" class="ready-player-banner" style="display: none;">
+          <div class="ready-player-item ready-player-explaining">
+            <span class="ready-player-role">🗣️ Förklarar:</span>
+            <span id="ready-explainer-name" class="ready-player-highlight">Anna</span>
+          </div>
+          <div id="ready-guessers-box" class="ready-player-item ready-player-guessing">
+            <span class="ready-player-role">👂 Gissar:</span>
+            <span id="ready-guessers-names" class="ready-player-highlight">Erik</span>
+          </div>
+        </div>
+
         <p class="ready-instruction">
           Lämna över telefonen till förklararen. Tryck på knappen nedan när ni är redo att köra igång timern!
         </p>
@@ -267,7 +292,7 @@
           <div id="stamp-pass" class="stamp stamp-pass">PASS</div>
 
           <span id="word-category" class="card-category-badge">Föremål</span>
-          <span id="word-text" class="word-text">Dammsugare</span>
+          <span id="word-text" class="word-text" aria-live="assertive" aria-atomic="true">Dammsugare</span>
 
           <div class="card-gesture-hint">
             <span>👈 Svep för Pass</span>
@@ -423,6 +448,9 @@
           </div>
         </div>
 
+        <button id="btn-share-result" type="button" class="btn-share">
+          📲 Dela matchresultat
+        </button>
         <button id="btn-play-again-same" type="button" class="btn-primary">
           Spela igen med samma lag 🔄
         </button>
@@ -459,7 +487,11 @@
 
         <div class="section-title">
           <span>Dina egna ord:</span>
-          <button id="btn-clear-all-custom" type="button" class="btn-clear-all">Rensa alla</button>
+          <div class="custom-words-actions-group">
+            <button id="btn-export-custom" type="button" class="btn-tool" title="Kopiera alla egna ord till urklipp">📋 Exportera</button>
+            <button id="btn-import-custom" type="button" class="btn-tool" title="Importera ord">📥 Importera</button>
+            <button id="btn-clear-all-custom" type="button" class="btn-clear-all">Rensa alla</button>
+          </div>
         </div>
 
         <div id="custom-words-list" class="custom-words-list">

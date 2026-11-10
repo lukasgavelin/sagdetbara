@@ -91,12 +91,18 @@ export class AliasApp {
       btnAddCustomWord: document.getElementById('btn-add-custom-word'),
       customWordsList: document.getElementById('custom-words-list'),
       btnClearAllCustom: document.getElementById('btn-clear-all-custom'),
+      btnExportCustom: document.getElementById('btn-export-custom'),
+      btnImportCustom: document.getElementById('btn-import-custom'),
 
       // Ready View
       readyTeamBadge: document.getElementById('ready-team-badge'),
       readyTeamName: document.getElementById('ready-team-name'),
       readyRoundNum: document.getElementById('ready-round-num'),
       readyTeamScore: document.getElementById('ready-team-score'),
+      readyPlayerBanner: document.getElementById('ready-player-banner'),
+      readyExplainerName: document.getElementById('ready-explainer-name'),
+      readyGuessersBox: document.getElementById('ready-guessers-box'),
+      readyGuessersNames: document.getElementById('ready-guessers-names'),
       btnBeginRound: document.getElementById('btn-begin-round'),
       btnReadyQuit: document.getElementById('btn-ready-quit'),
 
@@ -146,6 +152,7 @@ export class AliasApp {
       statTotalCorrect: document.getElementById('stat-total-correct'),
       statTotalPass: document.getElementById('stat-total-pass'),
       statAccuracy: document.getElementById('stat-accuracy'),
+      btnShareResult: document.getElementById('btn-share-result'),
       btnPlayAgainSame: document.getElementById('btn-play-again-same'),
       btnPlayNewGame: document.getElementById('btn-play-new-game'),
 
@@ -223,9 +230,18 @@ export class AliasApp {
   // =========================================================================
   // Vy-hantering
   // =========================================================================
-  showView(viewName) {
+  showView(viewName, pushHistory = true) {
     this.currentView = viewName;
     this.stopConfetti();
+
+    if (pushHistory && typeof window !== 'undefined' && window.history) {
+      const state = { view: viewName };
+      if (!window.history.state) {
+        window.history.replaceState(state, '');
+      } else if (window.history.state?.view !== viewName) {
+        window.history.pushState(state, '');
+      }
+    }
 
     Object.keys(this.dom.views).forEach((key) => {
       const viewEl = this.dom.views[key];
@@ -287,6 +303,9 @@ export class AliasApp {
       const item = document.createElement('div');
       item.className = 'team-item';
 
+      const mainRow = document.createElement('div');
+      mainRow.className = 'team-main-row';
+
       const colorBox = document.createElement('button');
       colorBox.type = 'button';
       colorBox.className = 'team-color-picker';
@@ -311,8 +330,8 @@ export class AliasApp {
         this.saveSettings();
       });
 
-      item.appendChild(colorBox);
-      item.appendChild(input);
+      mainRow.appendChild(colorBox);
+      mainRow.appendChild(input);
 
       if (this.settings.teams.length > CONFIG.MIN_TEAMS) {
         const btnRemove = document.createElement('button');
@@ -326,8 +345,26 @@ export class AliasApp {
           this.saveSettings();
           this.renderSettings();
         });
-        item.appendChild(btnRemove);
+        mainRow.appendChild(btnRemove);
       }
+
+      item.appendChild(mainRow);
+
+      const playersInput = document.createElement('input');
+      playersInput.type = 'text';
+      playersInput.className = 'team-players-input';
+      playersInput.placeholder = 'Spelare: t.ex. Anna, Erik (valfritt)';
+      playersInput.value = Array.isArray(team.players) ? team.players.join(', ') : '';
+      playersInput.setAttribute('aria-label', `Spelare i ${team.name}`);
+      playersInput.addEventListener('input', (e) => {
+        team.players = e.target.value
+          .split(',')
+          .map((p) => normalizeText(p, 25))
+          .filter(Boolean)
+          .slice(0, 10);
+        this.saveSettings();
+      });
+      item.appendChild(playersInput);
 
       this.dom.teamList.appendChild(item);
     });
@@ -397,7 +434,8 @@ export class AliasApp {
 
     this.settings.teams.push({
       name: defaultName,
-      color: availableColor
+      color: availableColor,
+      players: []
     });
     this.saveSettings();
     this.renderSettings();
@@ -536,6 +574,21 @@ export class AliasApp {
     this.dom.readyTeamName.style.color = activeTeam.color;
     this.dom.readyRoundNum.textContent = this.game.isSuddenDeath ? '⚡ Sudden Death' : `Omgång ${this.game.roundNumber}`;
     this.dom.readyTeamScore.textContent = activeTeam.score;
+
+    const explainer = this.game.currentExplainer;
+    const guessers = this.game.currentGuessers;
+    if (explainer && this.dom.readyPlayerBanner) {
+      this.dom.readyPlayerBanner.style.display = 'flex';
+      this.dom.readyExplainerName.textContent = explainer;
+      if (guessers.length > 0 && this.dom.readyGuessersBox) {
+        this.dom.readyGuessersBox.style.display = 'flex';
+        this.dom.readyGuessersNames.textContent = guessers.join(', ');
+      } else if (this.dom.readyGuessersBox) {
+        this.dom.readyGuessersBox.style.display = 'none';
+      }
+    } else if (this.dom.readyPlayerBanner) {
+      this.dom.readyPlayerBanner.style.display = 'none';
+    }
 
     this.showView('ready');
   }
@@ -865,6 +918,90 @@ export class AliasApp {
     this.showView('victory');
   }
 
+  async shareGameResult() {
+    if (!this.game) return;
+    const winnerTeam = [...this.game.teams].sort((a, b) => b.score - a.score)[0];
+    if (!winnerTeam) return;
+
+    const totalGuesses = winnerTeam.totalCorrect + winnerTeam.totalPass;
+    const accuracy = totalGuesses > 0 ? Math.round((winnerTeam.totalCorrect / totalGuesses) * 100) : 0;
+
+    const shareText = `🏆 ${winnerTeam.name} vann Säg det bara! ⚡\n` +
+      `Slutpoäng: ${winnerTeam.score} p\n` +
+      `Träffsäkerhet: ${accuracy}%\n` +
+      `Rätt: ${winnerTeam.totalCorrect} st | Pass: ${winnerTeam.totalPass} st\n` +
+      `Spela på: https://sagdetbara.pages.dev`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Säg det bara! – Matchresultat',
+          text: shareText
+        });
+        return;
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.warn('Delning avbröts eller misslyckades', err);
+        }
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareText);
+      this.showToast('Matchresultatet har kopierats till urklipp! 📋');
+    } catch {
+      this.showToast('Kunde inte kopiera resultat.');
+    }
+  }
+
+  exportCustomWords() {
+    if (!this.customWords || this.customWords.length === 0) {
+      this.showToast('Du har inga egna ord sparade ännu.');
+      return;
+    }
+    const text = this.customWords.join('\n');
+    navigator.clipboard.writeText(text)
+      .then(() => this.showToast(`${this.customWords.length} egna ord kopierade till urklipp! 📋`))
+      .catch(() => this.showToast('Kunde inte kopiera ord till urklipp.'));
+  }
+
+  async importCustomWords() {
+    let text = '';
+    try {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        text = await navigator.clipboard.readText();
+      }
+    } catch {
+      // Ignorera urklippsfel
+    }
+
+    if (!text || !text.trim()) {
+      text = prompt('Klistra in ord (ett per rad eller separerade med komma):');
+    }
+
+    if (!text || !text.trim()) return;
+
+    const newWords = text
+      .split(/[\n,]+/)
+      .map((w) => normalizeText(w, CONFIG.MAX_WORD_LENGTH))
+      .filter((w) => w.length >= 2);
+
+    if (newWords.length === 0) {
+      this.showToast('Inga giltiga ord hittades att importera.');
+      return;
+    }
+
+    const beforeCount = this.customWords.length;
+    const combined = [...this.customWords, ...newWords];
+    this.storage.saveCustomWords(combined);
+    this.customWords = this.storage.loadCustomWords();
+    const added = this.customWords.length - beforeCount;
+
+    this.updateCustomWordsCountUI();
+    this.renderCustomWordsModal();
+    this.showToast(`${added} nya egna ord importerades! 🎉`);
+  }
+
   // =========================================================================
   // Touch & Pointer på spelkort
   // =========================================================================
@@ -1129,6 +1266,13 @@ export class AliasApp {
       }
     });
 
+    if (this.dom.btnExportCustom) {
+      this.dom.btnExportCustom.addEventListener('click', () => this.exportCustomWords());
+    }
+    if (this.dom.btnImportCustom) {
+      this.dom.btnImportCustom.addEventListener('click', () => this.importCustomWords());
+    }
+
     // Navigering
     this.dom.btnStartGame.addEventListener('click', () => this.startGame());
     this.dom.btnBeginRound.addEventListener('click', () => this.startRound());
@@ -1173,6 +1317,9 @@ export class AliasApp {
     this.dom.btnStartSuddenDeath.addEventListener('click', () => this.showReadyView());
 
     // Vinst
+    if (this.dom.btnShareResult) {
+      this.dom.btnShareResult.addEventListener('click', () => this.shareGameResult());
+    }
     this.dom.btnPlayAgainSame.addEventListener('click', () => this.startGame());
     this.dom.btnPlayNewGame.addEventListener('click', () => this.showView('settings'));
 
@@ -1225,6 +1372,36 @@ export class AliasApp {
       } else if (e.key === 'p' || e.key === 'P') {
         this.togglePause();
       }
+    });
+
+    // P1: Hantera webbläsarens bakåtknapp och svepgester (popstate)
+    window.addEventListener('popstate', (e) => {
+      if (this.dom.confirmQuitModal?.classList.contains('active')) {
+        this.closeConfirmQuitModal();
+        if (window.history) window.history.pushState({ view: this.currentView }, '');
+        return;
+      }
+      if (this.dom.customWordsModal?.classList.contains('active')) {
+        closeCustomModal();
+        if (window.history) window.history.pushState({ view: this.currentView }, '');
+        return;
+      }
+      if (this.currentView === 'game' || this.currentView === 'review') {
+        if (window.history) window.history.pushState({ view: this.currentView }, '');
+        this.requestQuitGame();
+        return;
+      }
+      if (this.currentView === 'ready' || this.currentView === 'scoreboard' || this.currentView === 'suddenDeath') {
+        if (window.history) window.history.pushState({ view: this.currentView }, '');
+        this.requestQuitGame();
+        return;
+      }
+      if (this.currentView === 'victory') {
+        this.showView('settings', false);
+        return;
+      }
+      const targetView = e.state?.view || 'settings';
+      this.showView(targetView, false);
     });
   }
 }

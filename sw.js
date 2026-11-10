@@ -1,5 +1,5 @@
 // Service Worker för Säg det bara!
-const CACHE_NAME = 'sag-det-bara-v3';
+const CACHE_NAME = 'sag-det-bara-v4';
 
 const ASSETS_TO_CACHE = [
   './',

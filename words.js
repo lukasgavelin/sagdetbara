@@ -1,4 +1,4 @@
-// Säg det bara! – Ordbas (1026 ord)
+// Säg det bara! – Ordbas (1095 ord)
 // Autogenererat och kvalitetssäkrat för offline- och mobilspel
 export const ALIAS_WORDS = [
   {
@@ -7181,6 +7181,489 @@ export const ALIAS_WORDS = [
     "word": "Sytråd",
     "category": "Föremål",
     "difficulty": "enkel",
+    "package": "standard"
+  },
+  {
+    "id": 1027,
+    "word": "Deja vu",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "medel",
+    "package": "klurigt"
+  },
+  {
+    "id": 1028,
+    "word": "Tidsparadox",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "medel",
+    "package": "klurigt"
+  },
+  {
+    "id": 1029,
+    "word": "Tankeexperiment",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "medel",
+    "package": "klurigt"
+  },
+  {
+    "id": 1030,
+    "word": "Svarta hål",
+    "category": "Vetenskap & Teknik",
+    "difficulty": "medel",
+    "package": "klurigt"
+  },
+  {
+    "id": 1031,
+    "word": "Händelsehorisont",
+    "category": "Vetenskap & Teknik",
+    "difficulty": "svår",
+    "package": "klurigt"
+  },
+  {
+    "id": 1032,
+    "word": "Synestesi",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "svår",
+    "package": "klurigt"
+  },
+  {
+    "id": 1033,
+    "word": "Nostalgivåg",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "medel",
+    "package": "klurigt"
+  },
+  {
+    "id": 1034,
+    "word": "Bystander-effekten",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "svår",
+    "package": "klurigt"
+  },
+  {
+    "id": 1035,
+    "word": "Prokrastinering",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "medel",
+    "package": "klurigt"
+  },
+  {
+    "id": 1036,
+    "word": "Klimatkompensation",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "medel",
+    "package": "klurigt"
+  },
+  {
+    "id": 1037,
+    "word": "Hypokondriker",
+    "category": "Personer & Kultur",
+    "difficulty": "medel",
+    "package": "klurigt"
+  },
+  {
+    "id": 1038,
+    "word": "Självuppfyllande profetia",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "svår",
+    "package": "klurigt"
+  },
+  {
+    "id": 1039,
+    "word": "Paradigmskifte",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "svår",
+    "package": "klurigt"
+  },
+  {
+    "id": 1040,
+    "word": "Platons grotta",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "svår",
+    "package": "klurigt"
+  },
+  {
+    "id": 1041,
+    "word": "Existentiell kris",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "svår",
+    "package": "klurigt"
+  },
+  {
+    "id": 1042,
+    "word": "Social ingenjörskonst",
+    "category": "Vetenskap & Teknik",
+    "difficulty": "svår",
+    "package": "klurigt"
+  },
+  {
+    "id": 1043,
+    "word": "DNA-sekvensering",
+    "category": "Vetenskap & Teknik",
+    "difficulty": "svår",
+    "package": "klurigt"
+  },
+  {
+    "id": 1044,
+    "word": "Biometrisk scanning",
+    "category": "Vetenskap & Teknik",
+    "difficulty": "svår",
+    "package": "klurigt"
+  },
+  {
+    "id": 1045,
+    "word": "Hypotesprövning",
+    "category": "Vetenskap & Teknik",
+    "difficulty": "svår",
+    "package": "klurigt"
+  },
+  {
+    "id": 1046,
+    "word": "Optisk illusion",
+    "category": "Vetenskap & Teknik",
+    "difficulty": "medel",
+    "package": "klurigt"
+  },
+  {
+    "id": 1047,
+    "word": "Subkultur",
+    "category": "Personer & Kultur",
+    "difficulty": "medel",
+    "package": "klurigt"
+  },
+  {
+    "id": 1048,
+    "word": "Dansa på bordet",
+    "category": "Verb & Handlingar",
+    "difficulty": "medel",
+    "package": "party"
+  },
+  {
+    "id": 1049,
+    "word": "Smitnota",
+    "category": "Fest & Nöje",
+    "difficulty": "svår",
+    "package": "party"
+  },
+  {
+    "id": 1050,
+    "word": "Ölsinne",
+    "category": "Fest & Nöje",
+    "difficulty": "medel",
+    "package": "party"
+  },
+  {
+    "id": 1051,
+    "word": "Skumpasprut",
+    "category": "Fest & Nöje",
+    "difficulty": "medel",
+    "package": "party"
+  },
+  {
+    "id": 1052,
+    "word": "VIP-avdelning",
+    "category": "Fest & Nöje",
+    "difficulty": "medel",
+    "package": "party"
+  },
+  {
+    "id": 1053,
+    "word": "Bakismat",
+    "category": "Mat & Dryck",
+    "difficulty": "medel",
+    "package": "party"
+  },
+  {
+    "id": 1054,
+    "word": "Pizzafest",
+    "category": "Mat & Dryck",
+    "difficulty": "enkel",
+    "package": "party"
+  },
+  {
+    "id": 1055,
+    "word": "Stämningshöjare",
+    "category": "Fest & Nöje",
+    "difficulty": "medel",
+    "package": "party"
+  },
+  {
+    "id": 1056,
+    "word": "Dansgolvsmagnet",
+    "category": "Fest & Nöje",
+    "difficulty": "svår",
+    "package": "party"
+  },
+  {
+    "id": 1057,
+    "word": "Småbordsmingel",
+    "category": "Fest & Nöje",
+    "difficulty": "svår",
+    "package": "party"
+  },
+  {
+    "id": 1058,
+    "word": "Skål och välkomna",
+    "category": "Fest & Nöje",
+    "difficulty": "medel",
+    "package": "party"
+  },
+  {
+    "id": 1059,
+    "word": "Midsommardans",
+    "category": "Fest & Nöje",
+    "difficulty": "medel",
+    "package": "party"
+  },
+  {
+    "id": 1060,
+    "word": "Karaokemikrofon",
+    "category": "Föremål",
+    "difficulty": "medel",
+    "package": "party"
+  },
+  {
+    "id": 1061,
+    "word": "Limo-resa",
+    "category": "Fest & Nöje",
+    "difficulty": "medel",
+    "package": "party"
+  },
+  {
+    "id": 1062,
+    "word": "Förfest-playlist",
+    "category": "Fest & Nöje",
+    "difficulty": "svår",
+    "package": "party"
+  },
+  {
+    "id": 1063,
+    "word": "Skomakarlåda",
+    "category": "Mat & Dryck",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1064,
+    "word": "Källsortering",
+    "category": "Familj & Vardag",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1065,
+    "word": "Tvättstugebråk",
+    "category": "Familj & Vardag",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1066,
+    "word": "Pantsamling",
+    "category": "Familj & Vardag",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1067,
+    "word": "Häckklippare",
+    "category": "Föremål",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1068,
+    "word": "Överklagande",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "svår",
+    "package": "standard"
+  },
+  {
+    "id": 1069,
+    "word": "Byråkrati",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "svår",
+    "package": "standard"
+  },
+  {
+    "id": 1070,
+    "word": "Lagmansrätt",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "svår",
+    "package": "standard"
+  },
+  {
+    "id": 1071,
+    "word": "Kommunfullmäktige",
+    "category": "Personer & Kultur",
+    "difficulty": "svår",
+    "package": "standard"
+  },
+  {
+    "id": 1072,
+    "word": "Bostadsrättsförening",
+    "category": "Familj & Vardag",
+    "difficulty": "svår",
+    "package": "standard"
+  },
+  {
+    "id": 1073,
+    "word": "Räntehöjning",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "svår",
+    "package": "standard"
+  },
+  {
+    "id": 1074,
+    "word": "Amorteringskrav",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "svår",
+    "package": "standard"
+  },
+  {
+    "id": 1075,
+    "word": "Fika-abonnemang",
+    "category": "Familj & Vardag",
+    "difficulty": "svår",
+    "package": "standard"
+  },
+  {
+    "id": 1076,
+    "word": "Pendeltågskaos",
+    "category": "Platser & Resor",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1077,
+    "word": "Cykeldäckspump",
+    "category": "Föremål",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1078,
+    "word": "Bruksanvisning",
+    "category": "Föremål",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1079,
+    "word": "Reservnyckel",
+    "category": "Föremål",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1080,
+    "word": "Diskmedelsflaska",
+    "category": "Föremål",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1081,
+    "word": "Badrumsmatta",
+    "category": "Föremål",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1082,
+    "word": "Brandvarnare",
+    "category": "Föremål",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1083,
+    "word": "Första hjälpen-låda",
+    "category": "Föremål",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1084,
+    "word": "Halkskydd",
+    "category": "Föremål",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1085,
+    "word": "Kupévärmare",
+    "category": "Föremål",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1086,
+    "word": "Taklagsfest",
+    "category": "Fest & Nöje",
+    "difficulty": "svår",
+    "package": "standard"
+  },
+  {
+    "id": 1087,
+    "word": "Husbesiktning",
+    "category": "Familj & Vardag",
+    "difficulty": "svår",
+    "package": "standard"
+  },
+  {
+    "id": 1088,
+    "word": "Lagfart",
+    "category": "Klurigt & Abstrakt",
+    "difficulty": "svår",
+    "package": "standard"
+  },
+  {
+    "id": 1089,
+    "word": "Smygfilma",
+    "category": "Verb & Handlingar",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1090,
+    "word": "Ficktjuva",
+    "category": "Verb & Handlingar",
+    "difficulty": "svår",
+    "package": "standard"
+  },
+  {
+    "id": 1091,
+    "word": "Överraska",
+    "category": "Verb & Handlingar",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1092,
+    "word": "Improvisera",
+    "category": "Verb & Handlingar",
+    "difficulty": "medel",
+    "package": "standard"
+  },
+  {
+    "id": 1093,
+    "word": "Bortförklara",
+    "category": "Verb & Handlingar",
+    "difficulty": "svår",
+    "package": "standard"
+  },
+  {
+    "id": 1094,
+    "word": "Konfrontera",
+    "category": "Verb & Handlingar",
+    "difficulty": "svår",
+    "package": "standard"
+  },
+  {
+    "id": 1095,
+    "word": "Missförstå",
+    "category": "Verb & Handlingar",
+    "difficulty": "medel",
     "package": "standard"
   }
 ];

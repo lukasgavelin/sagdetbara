@@ -141,3 +141,43 @@ test('GameState serialization and deserialization', () => {
   assert.equal(restored.roundNumber, 3);
   assert.equal(restored.passPenalty, false);
 });
+
+test('GameState rotates explainer among team players', () => {
+  const game = new GameState({
+    teams: [
+      { name: 'Lag Blå', color: '#3b82f6', players: ['Anna', 'Erik', 'Lisa'] },
+      { name: 'Lag Röd', color: '#ef4444', players: ['Kalle', 'Oskar'] }
+    ],
+    targetScore: 50,
+    roundTime: 60,
+    passPenalty: true
+  });
+
+  // Lag Blå round 1
+  assert.equal(game.activeTeam.name, 'Lag Blå');
+  assert.equal(game.currentExplainer, 'Anna');
+  assert.deepEqual(game.currentGuessers, ['Erik', 'Lisa']);
+
+  game.beginRound();
+  game.record({ id: 1, word: 'Båt' }, WORD_STATUS.CORRECT);
+  game.confirmRound();
+
+  // Lag Röd round 1
+  assert.equal(game.activeTeam.name, 'Lag Röd');
+  assert.equal(game.currentExplainer, 'Kalle');
+  assert.deepEqual(game.currentGuessers, ['Oskar']);
+
+  game.beginRound();
+  game.confirmRound();
+
+  // Lag Blå round 2 -> Should now be Erik!
+  assert.equal(game.activeTeam.name, 'Lag Blå');
+  assert.equal(game.currentExplainer, 'Erik');
+  assert.deepEqual(game.currentGuessers, ['Anna', 'Lisa']);
+
+  // Serialization preserves players and explainer rotation
+  const json = game.toJSON();
+  const restored = GameState.fromJSON(json);
+  assert.deepEqual(restored.teams[0].players, ['Anna', 'Erik', 'Lisa']);
+  assert.equal(restored.currentExplainer, 'Erik');
+});

@@ -5,6 +5,7 @@
   "description": "Det blixtsnabba sällskapsspelet på svenska",
   "scripts": {
     "test": "node --test test/*.test.js",
-    "validate-words": "node scripts/validate-words.mjs"
+    "validate-words": "node scripts/validate-words.mjs",
+    "bump-version": "node scripts/bump-version.mjs"
   }
 }

@@ -45,7 +45,7 @@ export const PRESET_TEAM_NAMES = Object.freeze([
 
 export const PACKAGES = Object.freeze(['standard', 'party', 'familj', 'klurigt']);
 
-export const TARGET_SCORES = Object.freeze([30, 50, 80]);
+export const TARGET_SCORES = Object.freeze([20, 30, 50, 80]);
 export const ROUND_TIMES = Object.freeze([30, 45, 60, 90]);
 
 /** Svårighetsnivåer i orddatan */
@@ -67,8 +67,8 @@ export const WORD_STATUS = Object.freeze({
 
 export const DEFAULT_SETTINGS = Object.freeze({
   teams: [
-    { name: 'Lag Blå', color: '#3b82f6' },
-    { name: 'Lag Röd', color: '#ef4444' }
+    { name: 'Lag Blå', color: '#3b82f6', players: [] },
+    { name: 'Lag Röd', color: '#ef4444', players: [] }
   ],
   packages: ['standard', 'party'],
   difficulty: 'blandat',

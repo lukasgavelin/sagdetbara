@@ -34,8 +34,18 @@ export function summarizeRound(words, passPenalty) {
   return { correct, pass, skipped, net };
 }
 
-function createTeam(id, { name, color }) {
-  return { id, name, color, score: 0, totalCorrect: 0, totalPass: 0, bestRound: 0 };
+function createTeam(id, { name, color, players = [] }) {
+  return {
+    id,
+    name,
+    color,
+    players: Array.isArray(players) ? [...players] : [],
+    explainingIndex: 0,
+    score: 0,
+    totalCorrect: 0,
+    totalPass: 0,
+    bestRound: 0
+  };
 }
 
 /**
@@ -73,6 +83,19 @@ export class GameState {
       return this.teamById(this.suddenDeathTeamIds[this.suddenDeathIndex]);
     }
     return this.teams[this.currentTeamIndex];
+  }
+
+  get currentExplainer() {
+    const team = this.activeTeam;
+    if (!team || !team.players || team.players.length === 0) return null;
+    return team.players[team.explainingIndex % team.players.length];
+  }
+
+  get currentGuessers() {
+    const team = this.activeTeam;
+    if (!team || !team.players || team.players.length <= 1) return [];
+    const explainerIdx = team.explainingIndex % team.players.length;
+    return team.players.filter((_, idx) => idx !== explainerIdx);
   }
 
   get suddenDeathTeams() {
@@ -151,6 +174,9 @@ export class GameState {
     team.totalCorrect += correct;
     team.totalPass += pass;
     team.bestRound = Math.max(team.bestRound, net);
+    if (team.players && team.players.length > 0) {
+      team.explainingIndex = (team.explainingIndex + 1) % team.players.length;
+    }
     this.roundWords = [];
 
     return this.isSuddenDeath ? this.#advanceSuddenDeath(team, net) : this.#advanceNormal();
@@ -202,7 +228,7 @@ export class GameState {
   // ---------------------------------------------------------------------------
   toJSON() {
     return {
-      teams: this.teams.map((t) => ({ ...t })),
+      teams: this.teams.map((t) => ({ ...t, players: [...t.players] })),
       targetScore: this.targetScore,
       roundTime: this.roundTime,
       passPenalty: this.passPenalty,
@@ -236,6 +262,8 @@ export class GameState {
         id: t.id,
         name: String(t.name),
         color: String(t.color),
+        players: Array.isArray(t.players) ? t.players.map(String) : [],
+        explainingIndex: (t.explainingIndex | 0) >= 0 ? (t.explainingIndex | 0) : 0,
         score: t.score,
         totalCorrect: t.totalCorrect | 0,
         totalPass: t.totalPass | 0,

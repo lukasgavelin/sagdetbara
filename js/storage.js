@@ -137,10 +137,20 @@ export function sanitizeSettings(input) {
   let teams = Array.isArray(s.teams)
     ? s.teams
         .slice(0, CONFIG.MAX_TEAMS)
-        .map((t, i) => ({
-          name: normalizeText(t?.name, CONFIG.MAX_TEAM_NAME_LENGTH) || `Lag ${i + 1}`,
-          color: PRESET_COLORS.includes(t?.color) ? t.color : PRESET_COLORS[i % PRESET_COLORS.length]
-        }))
+        .map((t, i) => {
+          const rawPlayers = Array.isArray(t?.players)
+            ? t.players
+            : (typeof t?.players === 'string' ? t.players.split(',') : []);
+          const players = rawPlayers
+            .map((p) => normalizeText(p, 25))
+            .filter(Boolean)
+            .slice(0, 10);
+          return {
+            name: normalizeText(t?.name, CONFIG.MAX_TEAM_NAME_LENGTH) || `Lag ${i + 1}`,
+            color: PRESET_COLORS.includes(t?.color) ? t.color : PRESET_COLORS[i % PRESET_COLORS.length],
+            players
+          };
+        })
     : [];
   if (teams.length < CONFIG.MIN_TEAMS) teams = d.teams.map((t) => ({ ...t }));
 
